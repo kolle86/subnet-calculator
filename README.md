@@ -29,6 +29,8 @@ cd subnet-calculator
 docker compose up -d
 ```
 
+The application now runs on http://localhost:5050
+
 ## Usage
 
 1.  Enter an IPv4 address in the "IPv4 Address" field.
