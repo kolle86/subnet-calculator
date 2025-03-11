@@ -2,40 +2,41 @@
 <html class="dark">
 <head>
   <title>Subnet-Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-800 text-white h-screen flex items-center justify-center dark:bg-gray-900 dark:text-gray-100">
-  <div class="bg-gray-700 p-8 rounded shadow-md dark:bg-gray-800">
+<body class="bg-gray-800 text-white flex items-center justify-center dark:bg-gray-900 dark:text-gray-100">
+  <div class="bg-gray-700 h-screen p-8 shadow-md dark:bg-gray-800 overflow-auto">
     <h1 class="text-2xl font-bold mb-4">🧮 Subnet-Calculator</h1>
     <form>
         <label for="ipv4">IPv4 Address:</label>
         <div class="flex items-center">
-            <input type="text" id="ipv4" name="ipv4" value="192.168.1.1" class="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" oninput="calculateSubnet(event)">
+            <input type="text" id="ipv4" name="ipv4" value="192.168.1.1" class="shadow appearance-none border rounded w-4/5 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-white border-gray-600" oninput="calculateSubnet(event)">
             <label class="ml-2" for="ipClassValue">Class:</label>
-            <input type="text" id="ipClassValue" name="ipClass" disabled class="shadow appearance-none border rounded w-1/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white text-center ml-1" value="">
+            <input type="text" id="ipClassValue" name="ipClass" disabled class="shadow appearance-none border rounded w-1/5 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline text-center ml-1 bg-gray-800 text-white border-gray-600" value="">
         </div>
-        <br><br>
+        <br>
 
         <label for="subnet">Subnet Mask Bits:</label>
         <div class="flex items-center">
-            <input type="range" id="subnet" name="subnet" min="0" max="32" value="8" class="cursor-pointer rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <input type="range" id="subnet" name="subnet" min="0" max="32" value="8" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer bg-gray-800">
             <span id="subnetValue" class="ml-2">8</span>
         </div><br>
 
         <label for="net-id">Net ID:</label>
-        <input type="text" id="net-id" name="net-id" disabled class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"><br><br>
+        <input type="text" id="net-id" name="net-id" disabled class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-white border-gray-600"><br><br>
 
         <label for="broadcast">Broadcast:</label>
-        <input type="text" id="broadcast" name="broadcast" disabled class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"><br><br>
+        <input type="text" id="broadcast" name="broadcast" disabled class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-white border-gray-600"><br><br>
 
         <label for="host-addresses">Number of Host Addresses:</label>
-        <input type="text" id="host-addresses" name="host-addresses" disabled class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"><br><br>
+        <input type="text" id="host-addresses" name="host-addresses" disabled class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-white border-gray-600"><br><br>
 
         <label for="subnets">Number of Subnets:</label>
-        <input type="text" id="subnets" name="subnets" disabled class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"><br><br>
+        <input type="text" id="subnets" name="subnets" disabled class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-white border-gray-600"><br><br>
 
         <label for="subnet-id">Subnet ID:</label>
-        <input type="text" id="subnet-id" name="subnet-id" disabled class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"><br><br>
+        <input type="text" id="subnet-id" name="subnet-id" disabled class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-white border-gray-600"><br><br>
     </form>
 
   </div>
