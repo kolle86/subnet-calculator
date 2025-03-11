@@ -44,6 +44,7 @@
         const slider = document.getElementById("subnet");
         const subnetValue = document.getElementById("subnetValue");
         let minSubnet = 0;
+        let previousIpClass = "";
 
         slider.oninput = function() {
             if (this.value < minSubnet) {
@@ -88,8 +89,23 @@
                     defaultSubnet = 8; // Class A
                 }
 
-                slider.value = defaultSubnet;
-                subnetValue.textContent = defaultSubnet.toString();
+                // Only change the slider value if the IP class has changed
+                let ipClass = "";
+                if (firstOctet >= 1 && firstOctet <= 126) {
+                    ipClass = "A";
+                } else if (firstOctet >= 128 && firstOctet <= 191) {
+                    ipClass = "B";
+                } else if (firstOctet >= 192 && firstOctet <= 223) {
+                    ipClass = "C";
+                } else {
+                    ipClass = "Invalid";
+                }
+
+                if (ipClass !== previousIpClass) {
+                    slider.value = defaultSubnet;
+                    subnetValue.textContent = defaultSubnet.toString();
+                    previousIpClass = ipClass;
+                }
                 minSubnet = defaultSubnet;
             }
 
