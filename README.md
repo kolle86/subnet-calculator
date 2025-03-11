@@ -1,10 +1,10 @@
-# Subnet Calculator
+# 🧮 Subnet Calculator
 
-## Description
+## 📝 Description
 
-This is a basic subnetting tool.
+This is a basic subnetting webtool.
 
-## Features
+## ✨ Features
 
 *   Calculates the network ID, broadcast address, and host address range for a given IPv4 address and subnet mask.
 *   Dynamically determines the class of the IPv4 address (A, B, or C).
@@ -12,7 +12,7 @@ This is a basic subnetting tool.
 
 ![Projekt Screenshot](screenshot.png)
 
-## Setup
+## ⚙️ Setup
 
 1. Clone the repository
 ```sh
@@ -31,7 +31,7 @@ docker compose up -d
 
 The application now runs on http://localhost:5050
 
-## Usage
+## 💻 Usage
 
 1.  Enter an IPv4 address in the "IPv4 Address" field.
 2.  Use the slider to adjust the subnet mask bits.
@@ -43,6 +43,6 @@ The application now runs on http://localhost:5050
     *   Subnet ID
     *   IP Class
 
-## License
+## ⚖️ License
 
 This project is licensed under the MIT License.
