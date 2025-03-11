@@ -1,0 +1,7 @@
+services:
+  subnet-calculator:
+    image: kolstr/subnet-calculator
+    container_name: subnet-calculator
+    restart: unless-stopped
+    ports:
+      - "5050:5050"

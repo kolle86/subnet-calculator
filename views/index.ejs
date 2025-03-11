@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html class="dark">
+<head>
+  <title>Subnetting</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-800 text-white h-screen flex items-center justify-center dark:bg-gray-900 dark:text-gray-100">
+  <div class="bg-gray-700 p-8 rounded shadow-md dark:bg-gray-800">
+    <h1 class="text-2xl font-bold mb-4">🌐 <i class="fas fa-binary"></i> Subnetting</h1>
+    <form>
+        <label for="ipv4">IPv4 Address:</label>
+        <div class="flex items-center">
+            <input type="text" id="ipv4" name="ipv4" value="192.168.1.1" class="shadow appearance-none border rounded w-5/6 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" oninput="calculateSubnet(event)">
+            <label class="ml-2" for="ipClassValue">Class:</label>
+            <input type="text" id="ipClassValue" name="ipClass" disabled class="shadow appearance-none border rounded w-1/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white text-center ml-1" value="">
+        </div>
+        <br><br>
+
+        <label for="subnet">Subnet Mask Bits:</label>
+        <div class="flex items-center">
+            <input type="range" id="subnet" name="subnet" min="0" max="32" value="8" class="cursor-pointer rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <span id="subnetValue" class="ml-2">8</span>
+        </div><br>
+
+        <label for="net-id">Net ID:</label>
+        <input type="text" id="net-id" name="net-id" disabled class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"><br><br>
+
+        <label for="broadcast">Broadcast:</label>
+        <input type="text" id="broadcast" name="broadcast" disabled class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"><br><br>
+
+        <label for="host-addresses">Number of Host Addresses:</label>
+        <input type="text" id="host-addresses" name="host-addresses" disabled class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"><br><br>
+
+        <label for="subnets">Number of Subnets:</label>
+        <input type="text" id="subnets" name="subnets" disabled class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"><br><br>
+
+        <label for="subnet-id">Subnet ID:</label>
+        <input type="text" id="subnet-id" name="subnet-id" disabled class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white"><br><br>
+    </form>
+
+  </div>
+    <script>
+        const slider = document.getElementById("subnet");
+        const subnetValue = document.getElementById("subnetValue");
+        let minSubnet = 0;
+
+        slider.oninput = function() {
+            if (this.value < minSubnet) {
+                this.value = minSubnet;
+            }
+            subnetValue.textContent = this.value;
+        }
+
+        function calculateSubnet(event) {
+            const ipv4 = document.getElementById("ipv4").value;
+            let subnet = document.getElementById("subnet").value;
+
+            const netId = document.getElementById("net-id");
+            const broadcast = document.getElementById("broadcast");
+            const hostAddresses = document.getElementById("host-addresses");
+            const subnets = document.getElementById("subnets");
+            const subnetId = document.getElementById("subnet-id");
+            const slider = document.getElementById("subnet");
+
+            if (event.target.id === "ipv4") {
+                if (!isValidIPv4(ipv4)) {
+                    // Do nothing if IPv4 is invalid
+                    netId.value = "";
+                    broadcast.value = "";
+                    hostAddresses.value = "";
+                    subnets.value = "";
+                    subnetId.value = "";
+                    slider.min = 0;
+                    return;
+                }
+
+                // Determine the class of the IPv4 address
+                const firstOctet = parseInt(ipv4.split(".")[0]);
+                let defaultSubnet;
+                if (firstOctet >= 1 && firstOctet <= 126) {
+                    defaultSubnet = 8; // Class A
+                } else if (firstOctet >= 128 && firstOctet <= 191) {
+                    defaultSubnet = 16; // Class B
+                } else if (firstOctet >= 192 && firstOctet <= 223) {
+                    defaultSubnet = 24; // Class C
+                } else {
+                    defaultSubnet = 8; // Class A
+                }
+
+                slider.value = defaultSubnet;
+                subnetValue.textContent = defaultSubnet.toString();
+                minSubnet = defaultSubnet;
+            }
+
+            subnet = slider.value;
+
+            // TODO: Implement subnet calculation logic here
+            netId.value = "Calculated Net ID";
+            broadcast.value = "Calculated Broadcast";
+            hostAddresses.value = "Calculated Host Addresses";
+
+            const ipv4Parts = ipv4.split(".");
+            let subnetMask = parseInt(subnet);
+
+            let binaryIp = "";
+            for (let i = 0; i < 4; i++) {
+                let part = parseInt(ipv4Parts[i]).toString(2);
+                while (part.length < 8) {
+                    part = "0" + part;
+                }
+                binaryIp += part;
+            }
+
+            let netIdBinary = binaryIp.substring(0, subnetMask);
+            while (netIdBinary.length < 32) {
+                netIdBinary += "0";
+            }
+
+            let broadcastBinary = binaryIp.substring(0, subnetMask);
+            while (broadcastBinary.length < 32) {
+                broadcastBinary += "1";
+            }
+
+            let netIdParts = [];
+            for (let i = 0; i < 4; i++) {
+                netIdParts.push(parseInt(netIdBinary.substring(i * 8, (i + 1) * 8), 2));
+            }
+
+            let broadcastParts = [];
+            for (let i = 0; i < 4; i++) {
+                broadcastParts.push(parseInt(broadcastBinary.substring(i * 8, (i + 1) * 8), 2));
+            }
+
+            netId.value = netIdParts.join(".");
+            broadcast.value = broadcastParts.join(".");
+
+            const numHostAddresses = Math.pow(2, 32 - subnetMask) - 2;
+            hostAddresses.value = numHostAddresses > 0 ? numHostAddresses : 0;
+
+            // Calculate the number of subnets based on the difference between the current subnet mask and the default mask
+            let numSubnets = Math.pow(2, subnetMask - minSubnet);
+            subnets.value = numSubnets;
+
+            // Calculate subnet ID
+            let subnetIdBinary = binaryIp.substring(minSubnet, subnetMask);
+            let subnetIdDecimal = subnetIdBinary ? parseInt(subnetIdBinary, 2) : 0;
+            subnetId.value = subnetIdDecimal;
+
+            // Determine the class of the IPv4 address
+            let ipClass = "";
+            const firstOctet = parseInt(ipv4.split(".")[0]);
+            if (firstOctet >= 1 && firstOctet <= 126) {
+                ipClass = "A";
+            } else if (firstOctet >= 128 && firstOctet <= 191) {
+                ipClass = "B";
+            } else if (firstOctet >= 192 && firstOctet <= 223) {
+                ipClass = "C";
+            } else {
+                ipClass = "Invalid";
+            }
+            document.getElementById("ipClassValue").value = ipClass;
+        }
+
+        function isValidIPv4(ipv4) {
+            const regex = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+            if (!regex.test(ipv4)) {
+                return false;
+            }
+
+            const parts = ipv4.split(".");
+            for (let i = 0; i < parts.length; i++) {
+                const part = parseInt(parts[i]);
+                if (part < 0 || part > 255) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        slider.addEventListener("input", calculateSubnet);
+        document.getElementById("ipv4").addEventListener("input", function(event) {
+            calculateSubnet(event);
+        });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.getElementById('ipv4').value = '192.168.1.1';
+            calculateSubnet({target: {id: 'ipv4'}});
+        });
+    </script>
+</body>
+</html>
