@@ -7,7 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-800 text-white flex items-center justify-center dark:bg-gray-900 dark:text-gray-100">
-  <div class="bg-gray-700 h-screen p-8 shadow-md dark:bg-gray-800 overflow-auto">
+  <div class="bg-gray-700 h-screen p-6 shadow-md dark:bg-gray-800 overflow-auto">
     <h1 class="text-2xl font-bold mb-4">🧮 Subnet-Calculator</h1>
     <form>
         <label for="ipv4">IPv4 Address:</label>
@@ -44,7 +44,7 @@
         Generate Subnet Table
     </button>
 
-    <div id="subnet-table-container"></div>
+    <div id="subnet-table-container" class="overflow-x-auto"></div>
 
   </div>
     <script>
@@ -228,7 +228,7 @@
             const headers = ["Net ID", "Host Address Range", "Broadcast"];
             headers.forEach(headerText => {
                 const header = document.createElement("th");
-                header.className = "py-3 px-6 text-left";
+                header.className = "py-3 px-2 text-left";
                 header.textContent = headerText;
                 headerRow.appendChild(header);
             });
@@ -252,7 +252,7 @@
                 row.className = "bg-gray-800 border-b border-gray-600 hover:bg-gray-600";
 
                 const netIdCell = document.createElement("td");
-                netIdCell.className = "py-4 px-6";
+                netIdCell.className = "py-4 px-2";
                 netIdCell.textContent = netId;
                 row.appendChild(netIdCell);
 
@@ -265,12 +265,12 @@
                 const startHostAddress = netIdParts.join(".");
 
                 const hostAddressRangeCell = document.createElement("td");
-                hostAddressRangeCell.className = "py-4 px-6";
+                hostAddressRangeCell.className = "py-4 px-2";
                 hostAddressRangeCell.textContent = startHostAddress + " - " + endHostAddress;
                 row.appendChild(hostAddressRangeCell);
 
                 const broadcastCell = document.createElement("td");
-                broadcastCell.className = "py-4 px-6";
+                broadcastCell.className = "py-4 px-2";
                 broadcastCell.textContent = broadcast;
                 row.appendChild(broadcastCell);
 
@@ -312,17 +312,17 @@
                     row.className = "bg-gray-800 border-b border-gray-600 hover:bg-gray-600";
 
                     const netIdCell = document.createElement("td");
-                    netIdCell.className = "py-4 px-6";
+                    netIdCell.className = "py-4 px-2";
                     netIdCell.textContent = netId;
                     row.appendChild(netIdCell);
 
                     const hostAddressRangeCell = document.createElement("td");
-                    hostAddressRangeCell.className = "py-4 px-6";
+                    hostAddressRangeCell.className = "py-4 px-2";
                     hostAddressRangeCell.textContent = startHostAddress + " - " + endHostAddress;
                     row.appendChild(hostAddressRangeCell);
 
                     const broadcastCell = document.createElement("td");
-                    broadcastCell.className = "py-4 px-6";
+                    broadcastCell.className = "py-4 px-2";
                     broadcastCell.textContent = broadcast;
                     row.appendChild(broadcastCell);
 
