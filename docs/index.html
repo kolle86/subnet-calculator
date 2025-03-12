@@ -111,7 +111,9 @@
         function updateButtonState() {
             const isValid = isValidIPv4(ipv4Input.value);
             generateTableButton.disabled = !isValid;
+            slider.disabled = !isValid;
             generateTableButton.classList.toggle("opacity-50", !isValid);
+            slider.classList.toggle("opacity-50", !isValid);
         }
 
         // Check if an IP is valid
