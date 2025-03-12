@@ -11,6 +11,7 @@ This is a basic subnetting webtool.
 *   Calculates the network ID, broadcast address, and host address range for a given IPv4 address and subnet mask.
 *   Dynamically determines the class of the IPv4 address (A, B, or C).
 *   Provides a slider to adjust the subnet mask.
+*   Generates a table of subnets with their network ID, host address range, and broadcast address.
 
 ![Projekt Screenshot](screenshot.png)
 

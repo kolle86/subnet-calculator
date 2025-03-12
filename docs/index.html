@@ -40,6 +40,12 @@
         <input type="text" id="subnet-id" name="subnet-id" disabled class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-white border-gray-600"><br><br>
     </form>
 
+    <button id="generate-table-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+        Generate Subnet Table
+    </button>
+
+    <div id="subnet-table-container"></div>
+
   </div>
     <script>
         const slider = document.getElementById("subnet");
@@ -55,7 +61,7 @@
         }
 
         function calculateSubnet(event) {
-            const ipv4 = document.getElementById("ipv4").value;
+            const ipv4 = ipv4Input.value;
             let subnet = document.getElementById("subnet").value;
 
             const netId = document.getElementById("net-id");
@@ -64,6 +70,9 @@
             const subnets = document.getElementById("subnets");
             const subnetId = document.getElementById("subnet-id");
             const slider = document.getElementById("subnet");
+
+            const ipClass = getIpClass(ipv4);
+            document.getElementById("ipClassValue").value = ipClass;
 
             if (event.target.id === "ipv4") {
                 if (!isValidIPv4(ipv4)) {
@@ -77,31 +86,18 @@
                     return;
                 }
 
-                // Determine the class of the IPv4 address
-                const firstOctet = parseInt(ipv4.split(".")[0]);
                 let defaultSubnet;
-                if (firstOctet >= 1 && firstOctet <= 126) {
+                if (ipClass === "A") {
                     defaultSubnet = 8; // Class A
-                } else if (firstOctet >= 128 && firstOctet <= 191) {
+                } else if (ipClass === "B") {
                     defaultSubnet = 16; // Class B
-                } else if (firstOctet >= 192 && firstOctet <= 223) {
+                } else if (ipClass === "C") {
                     defaultSubnet = 24; // Class C
                 } else {
                     defaultSubnet = 8; // Class A
                 }
 
                 // Only change the slider value if the IP class has changed
-                let ipClass = "";
-                if (firstOctet >= 1 && firstOctet <= 126) {
-                    ipClass = "A";
-                } else if (firstOctet >= 128 && firstOctet <= 191) {
-                    ipClass = "B";
-                } else if (firstOctet >= 192 && firstOctet <= 223) {
-                    ipClass = "C";
-                } else {
-                    ipClass = "Invalid";
-                }
-
                 if (ipClass !== previousIpClass) {
                     slider.value = defaultSubnet;
                     subnetValue.textContent = defaultSubnet.toString();
@@ -163,20 +159,6 @@
             let subnetIdBinary = binaryIp.substring(minSubnet, subnetMask);
             let subnetIdDecimal = subnetIdBinary ? parseInt(subnetIdBinary, 2) : 0;
             subnetId.value = subnetIdDecimal;
-
-            // Determine the class of the IPv4 address
-            let ipClass = "";
-            const firstOctet = parseInt(ipv4.split(".")[0]);
-            if (firstOctet >= 1 && firstOctet <= 126) {
-                ipClass = "A";
-            } else if (firstOctet >= 128 && firstOctet <= 191) {
-                ipClass = "B";
-            } else if (firstOctet >= 192 && firstOctet <= 223) {
-                ipClass = "C";
-            } else {
-                ipClass = "Invalid";
-            }
-            document.getElementById("ipClassValue").value = ipClass;
         }
 
         function isValidIPv4(ipv4) {
@@ -196,14 +178,185 @@
             return true;
         }
 
+        function getIpClass(ipv4) {
+            const firstOctet = parseInt(ipv4.split(".")[0]);
+            if (firstOctet >= 1 && firstOctet <= 126) {
+                return "A";
+            } else if (firstOctet >= 128 && firstOctet <= 191) {
+                return "B";
+            } else if (firstOctet >= 192 && firstOctet <= 223) {
+                return "C";
+            } else {
+                return "Invalid";
+            }
+        }
+
         slider.addEventListener("input", calculateSubnet);
-        document.getElementById("ipv4").addEventListener("input", function(event) {
+        const ipv4Input = document.getElementById("ipv4");
+        ipv4Input.addEventListener("input", calculateSubnetAndUpdateButton);
+
+        function calculateSubnetAndUpdateButton(event) {
             calculateSubnet(event);
-        });
+            updateButtonState();
+        }
 
         document.addEventListener('DOMContentLoaded', (event) => {
-            document.getElementById('ipv4').value = '192.168.1.1';
-            calculateSubnet({target: {id: 'ipv4'}});
+            ipv4Input.value = '192.168.1.1';
+            calculateSubnetAndUpdateButton({target: {id: 'ipv4'}});
+        });
+
+        const generateTableButton = document.getElementById("generate-table-button");
+
+        function generateSubnetTable() {
+            const ipv4 = ipv4Input.value;
+            const subnetMask = parseInt(document.getElementById("subnet").value);
+            const netId = document.getElementById("net-id").value;
+            const broadcast = document.getElementById("broadcast").value;
+            const ipClassValue = getIpClass(ipv4);
+            document.getElementById("ipClassValue").value = ipClassValue;
+
+            const tableContainer = document.getElementById("subnet-table-container");
+            tableContainer.innerHTML = ""; // Clear previous table
+
+            const table = document.createElement("table");
+            table.className = "table-auto w-full mt-4";
+
+            // Table header
+            const thead = document.createElement("thead");
+            thead.className = "text-xs font-semibold uppercase text-gray-400 bg-gray-700";
+            const headerRow = document.createElement("tr");
+            const headers = ["Net ID", "Host Address Range", "Broadcast"];
+            headers.forEach(headerText => {
+                const header = document.createElement("th");
+                header.className = "py-3 px-6 text-left";
+                header.textContent = headerText;
+                headerRow.appendChild(header);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            const tbody = document.createElement("tbody");
+            tbody.className = "text-sm text-gray-500";
+
+            const numSubnets = Math.pow(2, subnetMask - minSubnet);
+
+            if (numSubnets > 512) {
+                if (!confirm("The table will be very large. Are you sure you want to continue?")) {
+                    return;
+                }
+            }
+
+            if (ipClassValue === "A" && subnetMask === 8 || ipClassValue === "B" && subnetMask === 16 || ipClassValue === "C" && subnetMask === 24) {
+                // Default subnet mask, create one row
+                const row = document.createElement("tr");
+                row.className = "bg-gray-800 border-b border-gray-600 hover:bg-gray-600";
+
+                const netIdCell = document.createElement("td");
+                netIdCell.className = "py-4 px-6";
+                netIdCell.textContent = netId;
+                row.appendChild(netIdCell);
+
+                const broadcastParts = broadcast.split(".");
+                broadcastParts[3] = parseInt(broadcastParts[3]) - 1;
+                const endHostAddress = broadcastParts.join(".");
+
+                const netIdParts = netId.split(".");
+                netIdParts[3] = parseInt(netIdParts[3]) + 1;
+                const startHostAddress = netIdParts.join(".");
+
+                const hostAddressRangeCell = document.createElement("td");
+                hostAddressRangeCell.className = "py-4 px-6";
+                hostAddressRangeCell.textContent = startHostAddress + " - " + endHostAddress;
+                row.appendChild(hostAddressRangeCell);
+
+                const broadcastCell = document.createElement("td");
+                broadcastCell.className = "py-4 px-6";
+                broadcastCell.textContent = broadcast;
+                row.appendChild(broadcastCell);
+
+                tbody.appendChild(row);
+            } else {
+                // Implement subnet calculation for non-default subnet masks
+                const ipv4Parts = ipv4.split(".");
+                const baseIpDecimal = ipv4Parts.reduce((acc, part) => (acc << 8) | parseInt(part, 10), 0);
+
+                for (let i = 0; i < numSubnets; i++) {
+                    const subnetBaseDecimal = (baseIpDecimal & (((1 << subnetMask) - 1) << (32 - subnetMask))) + (i * Math.pow(2, 32 - subnetMask));
+
+                    let netIdDecimal = subnetBaseDecimal;
+                    let broadcastDecimal = subnetBaseDecimal + Math.pow(2, 32 - subnetMask) - 1;
+
+                    let netIdParts = [];
+                    for (let j = 0; j < 4; j++) {
+                        netIdParts.unshift(netIdDecimal & 255);
+                        netIdDecimal >>>= 8;
+                    }
+                    const netId = netIdParts.join(".");
+
+                    let broadcastParts = [];
+                    for (let j = 0; j < 4; j++) {
+                        broadcastParts.unshift(broadcastDecimal & 255);
+                        broadcastDecimal >>>= 8;
+                    }
+                    const broadcast = broadcastParts.join(".");
+
+                    let netIdPartsForRange = netId.split(".");
+                    netIdPartsForRange[3] = parseInt(netIdPartsForRange[3]) + 1;
+                    const startHostAddress = netIdPartsForRange.join(".");
+
+                    let broadcastPartsForRange = broadcast.split(".");
+                    broadcastPartsForRange[3] = parseInt(broadcastPartsForRange[3]) - 1;
+                    const endHostAddress = broadcastPartsForRange.join(".");
+
+                    const row = document.createElement("tr");
+                    row.className = "bg-gray-800 border-b border-gray-600 hover:bg-gray-600";
+
+                    const netIdCell = document.createElement("td");
+                    netIdCell.className = "py-4 px-6";
+                    netIdCell.textContent = netId;
+                    row.appendChild(netIdCell);
+
+                    const hostAddressRangeCell = document.createElement("td");
+                    hostAddressRangeCell.className = "py-4 px-6";
+                    hostAddressRangeCell.textContent = startHostAddress + " - " + endHostAddress;
+                    row.appendChild(hostAddressRangeCell);
+
+                    const broadcastCell = document.createElement("td");
+                    broadcastCell.className = "py-4 px-6";
+                    broadcastCell.textContent = broadcast;
+                    row.appendChild(broadcastCell);
+
+                    tbody.appendChild(row);
+                }
+            }
+
+            table.appendChild(tbody);
+            tableContainer.appendChild(table);
+        }
+
+        generateTableButton.addEventListener("click", generateSubnetTable);
+
+        function updateButtonState() {
+            const ipv4 = ipv4Input.value;
+            const isValid = isValidIPv4(ipv4);
+            generateTableButton.disabled = !isValid;
+            if (isValid) {
+                generateTableButton.classList.remove("opacity-50");
+            } else {
+                generateTableButton.classList.add("opacity-50");
+            }
+        }
+
+        function calculateSubnetAndUpdateButton(event) {
+            calculateSubnet(event);
+            updateButtonState();
+        }
+
+        ipv4Input.addEventListener("input", calculateSubnetAndUpdateButton);
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            ipv4Input.value = '192.168.1.1';
+            calculateSubnetAndUpdateButton({target: {id: 'ipv4'}});
         });
     </script>
 </body>
