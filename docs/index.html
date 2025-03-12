@@ -1,104 +1,177 @@
 <!DOCTYPE html>
 <html class="dark">
+
 <head>
-  <title>Subnet-Calculator</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Subnet-Calculator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-gray-800 text-white flex items-center justify-center dark:bg-gray-900 dark:text-gray-100">
-  <div class="bg-gray-700 h-screen p-6 shadow-md dark:bg-gray-800 overflow-auto">
-    <h1 class="text-2xl font-bold mb-4">🧮 Subnet-Calculator</h1>
-    <form>
-        <label for="ipv4">IPv4 Address:</label>
-        <div class="flex items-center">
-            <input type="text" id="ipv4" name="ipv4" value="192.168.1.1" class="shadow appearance-none border rounded w-4/5 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-white border-gray-600" oninput="calculateSubnet(event)">
-            <label class="ml-2" for="ipClassValue">Class:</label>
-            <input type="text" id="ipClassValue" name="ipClass" disabled class="shadow appearance-none border rounded w-1/5 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline text-center ml-1 bg-gray-800 text-gray-400 border-gray-600" value="">
-        </div>
-        <br>
+    <div class="bg-gray-700 h-screen p-6 shadow-md dark:bg-gray-800 overflow-auto">
+        <h1 class="text-2xl font-bold mb-4">🧮 Subnet-Calculator</h1>
+        <form>
+            <label for="ipv4">IPv4 Address:</label>
+            <div class="flex items-center">
+                <input type="text" id="ipv4" name="ipv4" value="192.168.1.1"
+                    class="shadow appearance-none border rounded w-4/5 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-white border-gray-600"
+                    oninput="calculateSubnet(event)">
+                <label class="ml-2" for="ipClassValue">Class:</label>
+                <input type="text" id="ipClassValue" name="ipClass" disabled
+                    class="shadow appearance-none border rounded w-1/5 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline text-center ml-1 bg-gray-800 text-gray-400 border-gray-600"
+                    value="">
+            </div>
+            <br>
 
-        <label for="subnet">Subnet Mask Bits:</label>
-        <div class="flex items-center">
-            <input type="range" id="subnet" name="subnet" min="0" max="32" value="8" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer bg-gray-800">
-            <span id="subnetValue" class="ml-2">8</span>
-        </div><br>
+            <label for="subnet">Subnet Mask Bits:</label>
+            <div class="flex items-center">
+                <input type="range" id="subnet" name="subnet" min="0" max="32" value="8"
+                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer bg-gray-800">
+                <span id="subnetValue" class="ml-2">8</span>
+            </div><br>
 
-        <label for="net-id">Net ID:</label>
-        <input type="text" id="net-id" name="net-id" disabled class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br><br>
+            <label for="net-id">Net ID:</label>
+            <input type="text" id="net-id" name="net-id" disabled
+                class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br><br>
 
-        <label for="broadcast">Broadcast:</label>
-        <input type="text" id="broadcast" name="broadcast" disabled class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br><br>
+            <label for="broadcast">Broadcast:</label>
+            <input type="text" id="broadcast" name="broadcast" disabled
+                class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br><br>
 
-        <label for="host-addresses">Number of Host Addresses:</label>
-        <input type="text" id="host-addresses" name="host-addresses" disabled class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br><br>
+            <label for="host-addresses">Number of Host Addresses:</label>
+            <input type="text" id="host-addresses" name="host-addresses" disabled
+                class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br><br>
 
-        <label for="subnets">Number of Subnets:</label>
-        <input type="text" id="subnets" name="subnets" disabled class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br><br>
+            <label for="subnets">Number of Subnets:</label>
+            <input type="text" id="subnets" name="subnets" disabled
+                class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br><br>
 
-        <label for="subnet-id">Subnet ID:</label>
-        <input type="text" id="subnet-id" name="subnet-id" disabled class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br><br>
-    </form>
+            <label for="subnet-id">Subnet ID:</label>
+            <input type="text" id="subnet-id" name="subnet-id" disabled
+                class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br><br>
+        </form>
 
-    <button id="generate-table-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-        Generate Subnet Table
-    </button>
+        <button id="generate-table-button"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button">
+            Generate Subnet Table
+        </button>
 
-    <div id="subnet-table-container" class="overflow-x-auto"></div>
+        <div id="subnet-table-container" class="overflow-x-auto"></div>
 
-  </div>
+    </div>
     <script>
+        // Global variables
         const slider = document.getElementById("subnet");
         const subnetValue = document.getElementById("subnetValue");
+        const ipv4Input = document.getElementById("ipv4");
+        const generateTableButton = document.getElementById("generate-table-button");
+        const tableContainer = document.getElementById("subnet-table-container");
+        const form = {
+            ipClassValue: document.getElementById("ipClassValue"),
+            netId: document.getElementById("net-id"),
+            broadcast: document.getElementById("broadcast"),
+            hostAddresses: document.getElementById("host-addresses"),
+            subnets: document.getElementById("subnets"),
+            subnetId: document.getElementById("subnet-id")
+        };
+
         let minSubnet = 0;
         let previousIpClass = "";
 
-        slider.oninput = function() {
-            if (this.value < minSubnet) {
-                this.value = minSubnet;
-            }
-            subnetValue.textContent = this.value;
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', initializeApp);
+        slider.addEventListener("input", handleSliderChange);
+        ipv4Input.addEventListener("input", handleIpv4Change);
+        generateTableButton.addEventListener("click", generateSubnetTable);
+
+        // Initialize the application
+        function initializeApp() {
+            ipv4Input.value = '192.168.1.1';
+            handleIpv4Change({ target: { id: 'ipv4' } });
         }
 
+        // Handle slider changes
+        function handleSliderChange() {
+            if (slider.value < minSubnet) {
+                slider.value = minSubnet;
+            }
+            subnetValue.textContent = slider.value;
+            calculateSubnet({ target: { id: 'subnet' } });
+        }
+
+        // Handle IPv4 input changes
+        function handleIpv4Change(event) {
+            calculateSubnet(event);
+            updateButtonState();
+        }
+
+        // Update button state based on IP validation
+        function updateButtonState() {
+            const isValid = isValidIPv4(ipv4Input.value);
+            generateTableButton.disabled = !isValid;
+            generateTableButton.classList.toggle("opacity-50", !isValid);
+        }
+
+        // Check if an IP is valid
+        function isValidIPv4(ipv4) {
+            const regex = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+            if (!regex.test(ipv4)) {
+                return false;
+            }
+
+            return ipv4.split(".").every(part => {
+                const num = parseInt(part);
+                return num >= 0 && num <= 255;
+            });
+        }
+
+        // Get IP class
+        function getIpClass(ipv4) {
+            const firstOctet = parseInt(ipv4.split(".")[0]);
+
+            if (firstOctet >= 1 && firstOctet <= 126) return "A";
+            if (firstOctet >= 128 && firstOctet <= 191) return "B";
+            if (firstOctet >= 192 && firstOctet <= 223) return "C";
+            return "Invalid";
+        }
+
+        // Convert IP to binary
+        function ipToBinary(ipv4) {
+            return ipv4.split(".").map(part => {
+                let binary = parseInt(part).toString(2);
+                return binary.padStart(8, "0");
+            }).join("");
+        }
+
+        // Convert binary to IP
+        function binaryToIp(binary) {
+            const parts = [];
+            for (let i = 0; i < 4; i++) {
+                parts.push(parseInt(binary.substring(i * 8, (i + 1) * 8), 2));
+            }
+            return parts.join(".");
+        }
+
+        // Calculate subnet information
         function calculateSubnet(event) {
             const ipv4 = ipv4Input.value;
-            let subnet = document.getElementById("subnet").value;
-
-            const netId = document.getElementById("net-id");
-            const broadcast = document.getElementById("broadcast");
-            const hostAddresses = document.getElementById("host-addresses");
-            const subnets = document.getElementById("subnets");
-            const subnetId = document.getElementById("subnet-id");
-            const slider = document.getElementById("subnet");
-
             const ipClass = getIpClass(ipv4);
-            document.getElementById("ipClassValue").value = ipClass;
+            form.ipClassValue.value = ipClass;
 
+            // Validate IP
             if (event.target.id === "ipv4") {
                 if (!isValidIPv4(ipv4)) {
-                    // Do nothing if IPv4 is invalid
                     ipv4Input.classList.add("border-red-500");
-                    netId.value = "";
-                    broadcast.value = "";
-                    hostAddresses.value = "";
-                    subnets.value = "";
-                    subnetId.value = "";
-                    slider.min = 0;
+                    clearFields();
                     return;
-                }else {
+                } else {
                     ipv4Input.classList.remove("border-red-500");
                 }
 
-                let defaultSubnet;
-                if (ipClass === "A") {
-                    defaultSubnet = 8; // Class A
-                } else if (ipClass === "B") {
-                    defaultSubnet = 16; // Class B
-                } else if (ipClass === "C") {
-                    defaultSubnet = 24; // Class C
-                } else {
-                    defaultSubnet = 8; // Class A
-                }
+                // Set default subnet based on IP class
+                const defaultSubnet = getDefaultSubnet(ipClass);
 
                 // Only change the slider value if the IP class has changed
                 if (ipClass !== previousIpClass) {
@@ -109,263 +182,82 @@
                 minSubnet = defaultSubnet;
             }
 
-            subnet = slider.value;
+            const subnetMask = parseInt(slider.value);
+            const binaryIp = ipToBinary(ipv4);
 
-            // TODO: Implement subnet calculation logic here
-            netId.value = "Calculated Net ID";
-            broadcast.value = "Calculated Broadcast";
-            hostAddresses.value = "Calculated Host Addresses";
+            // Calculate Net ID and Broadcast
+            const netIdBinary = binaryIp.substring(0, subnetMask).padEnd(32, "0");
+            const broadcastBinary = binaryIp.substring(0, subnetMask).padEnd(32, "1");
 
-            const ipv4Parts = ipv4.split(".");
-            let subnetMask = parseInt(subnet);
+            form.netId.value = binaryToIp(netIdBinary);
+            form.broadcast.value = binaryToIp(broadcastBinary);
 
-            let binaryIp = "";
-            for (let i = 0; i < 4; i++) {
-                let part = parseInt(ipv4Parts[i]).toString(2);
-                while (part.length < 8) {
-                    part = "0" + part;
-                }
-                binaryIp += part;
-            }
-
-            let netIdBinary = binaryIp.substring(0, subnetMask);
-            while (netIdBinary.length < 32) {
-                netIdBinary += "0";
-            }
-
-            let broadcastBinary = binaryIp.substring(0, subnetMask);
-            while (broadcastBinary.length < 32) {
-                broadcastBinary += "1";
-            }
-
-            let netIdParts = [];
-            for (let i = 0; i < 4; i++) {
-                netIdParts.push(parseInt(netIdBinary.substring(i * 8, (i + 1) * 8), 2));
-            }
-
-            let broadcastParts = [];
-            for (let i = 0; i < 4; i++) {
-                broadcastParts.push(parseInt(broadcastBinary.substring(i * 8, (i + 1) * 8), 2));
-            }
-
-            netId.value = netIdParts.join(".");
-            broadcast.value = broadcastParts.join(".");
-
+            // Calculate host addresses
             const numHostAddresses = Math.pow(2, 32 - subnetMask) - 2;
-            hostAddresses.value = numHostAddresses > 0 ? numHostAddresses : 0;
+            form.hostAddresses.value = numHostAddresses > 0 ? numHostAddresses : 0;
 
-            // Calculate the number of subnets based on the difference between the current subnet mask and the default mask
-            let numSubnets = Math.pow(2, subnetMask - minSubnet);
-            subnets.value = numSubnets;
+            // Calculate subnets
+            const numSubnets = Math.pow(2, subnetMask - minSubnet);
+            form.subnets.value = numSubnets;
 
             // Calculate subnet ID
-            let subnetIdBinary = binaryIp.substring(minSubnet, subnetMask);
-            let subnetIdDecimal = subnetIdBinary ? parseInt(subnetIdBinary, 2) : 0;
-            subnetId.value = subnetIdDecimal;
+            const subnetIdBinary = binaryIp.substring(minSubnet, subnetMask);
+            form.subnetId.value = subnetIdBinary ? parseInt(subnetIdBinary, 2) : 0;
         }
 
-        function isValidIPv4(ipv4) {
-            const regex = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
-            if (!regex.test(ipv4)) {
-                return false;
-            }
-
-            const parts = ipv4.split(".");
-            for (let i = 0; i < parts.length; i++) {
-                const part = parseInt(parts[i]);
-                if (part < 0 || part > 255) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        function getIpClass(ipv4) {
-            const firstOctet = parseInt(ipv4.split(".")[0]);
-            if (firstOctet >= 1 && firstOctet <= 126) {
-                return "A";
-            } else if (firstOctet >= 128 && firstOctet <= 191) {
-                return "B";
-            } else if (firstOctet >= 192 && firstOctet <= 223) {
-                return "C";
-            } else {
-                return "Invalid";
+        // Get default subnet based on IP class
+        function getDefaultSubnet(ipClass) {
+            switch (ipClass) {
+                case "A": return 8;
+                case "B": return 16;
+                case "C": return 24;
+                default: return 8;
             }
         }
 
-        slider.addEventListener("input", calculateSubnet);
-        const ipv4Input = document.getElementById("ipv4");
-        ipv4Input.addEventListener("input", calculateSubnetAndUpdateButton);
-
-        function calculateSubnetAndUpdateButton(event) {
-            calculateSubnet(event);
-            updateButtonState();
+        // Clear all fields
+        function clearFields() {
+            form.netId.value = "";
+            form.broadcast.value = "";
+            form.hostAddresses.value = "";
+            form.subnets.value = "";
+            form.subnetId.value = "";
+            slider.min = 0;
         }
 
-        document.addEventListener('DOMContentLoaded', (event) => {
-            ipv4Input.value = '192.168.1.1';
-            calculateSubnetAndUpdateButton({target: {id: 'ipv4'}});
-        });
-
-        const generateTableButton = document.getElementById("generate-table-button");
-
+        // Generate subnet table
         function generateSubnetTable() {
-            let subnetIdCounter=0;
             const ipv4 = ipv4Input.value;
-            const subnetMask = parseInt(document.getElementById("subnet").value);
-            const netId = document.getElementById("net-id").value;
-            const broadcast = document.getElementById("broadcast").value;
-            const subnetId = document.getElementById("subnet-id");
-            const ipClassValue = getIpClass(ipv4);
+            const subnetMask = parseInt(slider.value);
+            const ipClass = getIpClass(ipv4);
+            const subnetIdValue = parseInt(form.subnetId.value);
 
-            document.getElementById("ipClassValue").value = ipClassValue;
-
-            const tableContainer = document.getElementById("subnet-table-container");
             tableContainer.innerHTML = ""; // Clear previous table
 
-            const table = document.createElement("table");
-            table.className = "table-auto w-full mt-4";
-
-            // Table header
-            const thead = document.createElement("thead");
-            thead.className = "text-xs font-semibold uppercase text-gray-400 bg-gray-700";
-            const headerRow = document.createElement("tr");
-            const headers = ["Subnet ID", "Net ID", "Host Address Range", "Broadcast"];
-            headers.forEach(headerText => {
-                const header = document.createElement("th");
-                header.className = "py-3 px-2 text-left";
-                header.textContent = headerText;
-                headerRow.appendChild(header);
-            });
-            thead.appendChild(headerRow);
-            table.appendChild(thead);
-
+            const table = createTableElement();
             const tbody = document.createElement("tbody");
             tbody.className = "text-sm text-gray-400";
 
             const numSubnets = Math.pow(2, subnetMask - minSubnet);
 
+            // Check if table would be too large
             if (numSubnets > 512) {
                 if (!confirm("The table will be very large. Are you sure you want to continue?")) {
                     return;
                 }
             }
 
-            if (ipClassValue === "A" && subnetMask === 8 || ipClassValue === "B" && subnetMask === 16 || ipClassValue === "C" && subnetMask === 24) {
-                // Default subnet mask, create one row
-                const row = document.createElement("tr");
-                row.className = "bg-gray-800 border-b border-gray-600 hover:bg-gray-600";
+            // Check if using default subnet mask
+            const isDefaultSubnet = (ipClass === "A" && subnetMask === 8) ||
+                (ipClass === "B" && subnetMask === 16) ||
+                (ipClass === "C" && subnetMask === 24);
 
-                const subnetIdCell = document.createElement("td");
-                subnetIdCell.className = "py-4 px-2";
-                subnetIdCell.textContent = subnetIdCounter;
-                row.appendChild(subnetIdCell);
-
-                const netIdCell = document.createElement("td");
-                netIdCell.className = "py-4 px-2";
-                netIdCell.textContent = netId;
-                row.appendChild(netIdCell);
-
-                const broadcastParts = broadcast.split(".");
-                broadcastParts[3] = parseInt(broadcastParts[3]) - 1;
-                const endHostAddress = broadcastParts.join(".");
-
-                const netIdParts = netId.split(".");
-                netIdParts[3] = parseInt(netIdParts[3]) + 1;
-                const startHostAddress = netIdParts.join(".");
-
-                const hostAddressRangeCell = document.createElement("td");
-                hostAddressRangeCell.className = "py-4 px-2";
-                hostAddressRangeCell.textContent = startHostAddress + " - " + endHostAddress;
-                row.appendChild(hostAddressRangeCell);
-
-                const broadcastCell = document.createElement("td");
-                broadcastCell.className = "py-4 px-2";
-                broadcastCell.textContent = broadcast;
-                row.appendChild(broadcastCell);
-
-                tbody.appendChild(row);
+            if (isDefaultSubnet) {
+                // Add single row for default subnet
+                addDefaultSubnetRow(tbody);
             } else {
-                // Implement subnet calculation for non-default subnet masks
-                const ipv4Parts = ipv4.split(".");
-                let baseIpDecimal = ipv4Parts.reduce((acc, part) => (acc << 8) | parseInt(part, 10), 0);
-
-                let defaultSubnetMask;
-                if (ipClassValue === "A") {
-                    defaultSubnetMask = 8; // Class A
-                } else if (ipClassValue === "B") {
-                    defaultSubnetMask = 16; // Class B
-                } else if (ipClassValue === "C") {
-                    defaultSubnetMask = 24; // Class C
-                } else {
-                    defaultSubnetMask = 8; // Default to Class A
-                }
-
-                // Calculate the network address using the default subnet mask
-                const networkAddressDecimal = baseIpDecimal & (((1 << defaultSubnetMask) - 1) << (32 - defaultSubnetMask));
-                baseIpDecimal = networkAddressDecimal;
-
-                for (let i = 0; i < numSubnets; i++) {
-                    const subnetBaseDecimal = baseIpDecimal + (i * Math.pow(2, 32 - subnetMask));
-
-                    let netIdDecimal = subnetBaseDecimal;
-                    let broadcastDecimal = subnetBaseDecimal + Math.pow(2, 32 - subnetMask) - 1;
-
-                    let netIdParts = [];
-                    for (let j = 0; j < 4; j++) {
-                        netIdParts.unshift(netIdDecimal & 255);
-                        netIdDecimal >>>= 8;
-                    }
-                    const netId = netIdParts.join(".");
-
-                    let broadcastParts = [];
-                    for (let j = 0; j < 4; j++) {
-                        broadcastParts.unshift(broadcastDecimal & 255);
-                        broadcastDecimal >>>= 8;
-                    }
-                    const broadcast = broadcastParts.join(".");
-
-                    let netIdPartsForRange = netId.split(".");
-                    netIdPartsForRange[3] = parseInt(netIdPartsForRange[3]) + 1;
-                    const startHostAddress = netIdPartsForRange.join(".");
-
-                    let broadcastPartsForRange = broadcast.split(".");
-                    broadcastPartsForRange[3] = parseInt(broadcastPartsForRange[3]) - 1;
-                    const endHostAddress = broadcastPartsForRange.join(".");
-
-                    const row = document.createElement("tr");
-                    
-                    if(subnetId.value == subnetIdCounter){
-                        row.className = "bg-gray-800 border border-blue-600 hover:bg-gray-600";
-                    }else if(subnetId.value - 1 == subnetIdCounter){
-                        row.className = "bg-gray-800 hover:bg-gray-600";
-                    }else{
-                        row.className = "bg-gray-800 border-b border-gray-600 hover:bg-gray-600";
-                    }
-
-                    const subnetIdCell = document.createElement("td");
-                    subnetIdCell.className = "py-4 px-2";
-                    subnetIdCell.textContent = subnetIdCounter++;
-                    row.appendChild(subnetIdCell);
-
-                    const netIdCell = document.createElement("td");
-                    netIdCell.className = "py-4 px-2";
-                    netIdCell.textContent = netId;
-                    row.appendChild(netIdCell);
-
-                    const hostAddressRangeCell = document.createElement("td");
-                    hostAddressRangeCell.className = "py-4 px-2";
-                    hostAddressRangeCell.textContent = startHostAddress + " - " + endHostAddress;
-                    row.appendChild(hostAddressRangeCell);
-
-                    const broadcastCell = document.createElement("td");
-                    broadcastCell.className = "py-4 px-2";
-                    broadcastCell.textContent = broadcast;
-                    row.appendChild(broadcastCell);
-
-                    tbody.appendChild(row);
-                }
+                // Add multiple rows for custom subnets
+                addCustomSubnetRows(tbody, numSubnets, ipv4, subnetMask, subnetIdValue);
             }
 
             table.appendChild(tbody);
@@ -374,30 +266,154 @@
             table.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        generateTableButton.addEventListener("click", generateSubnetTable);
+        // Create table element with headers
+        function createTableElement() {
+            const table = document.createElement("table");
+            table.className = "table-auto w-full mt-4";
 
-        function updateButtonState() {
-            const ipv4 = ipv4Input.value;
-            const isValid = isValidIPv4(ipv4);
-            generateTableButton.disabled = !isValid;
-            if (isValid) {
-                generateTableButton.classList.remove("opacity-50");
-            } else {
-                generateTableButton.classList.add("opacity-50");
+            const thead = document.createElement("thead");
+            thead.className = "text-xs font-semibold uppercase text-gray-400 bg-gray-700";
+
+            const headerRow = document.createElement("tr");
+            ["Subnet ID", "Net ID", "Host Address Range", "Broadcast"].forEach(headerText => {
+                const header = document.createElement("th");
+                header.className = "py-3 px-2 text-left";
+                header.textContent = headerText;
+                headerRow.appendChild(header);
+            });
+
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            return table;
+        }
+
+        // Add default subnet row
+        function addDefaultSubnetRow(tbody) {
+            const netIdValue = form.netId.value;
+            const broadcastValue = form.broadcast.value;
+
+            const row = document.createElement("tr");
+            row.className = "bg-gray-800 border-b border-gray-600 hover:bg-gray-600";
+
+            // Subnet ID cell
+            const subnetIdCell = document.createElement("td");
+            subnetIdCell.className = "py-4 px-2";
+            subnetIdCell.textContent = "0";
+            row.appendChild(subnetIdCell);
+
+            // Net ID cell
+            const netIdCell = document.createElement("td");
+            netIdCell.className = "py-4 px-2";
+            netIdCell.textContent = netIdValue;
+            row.appendChild(netIdCell);
+
+            // Host range cell
+            const hostRange = calculateHostRange(netIdValue, broadcastValue);
+            const hostAddressRangeCell = document.createElement("td");
+            hostAddressRangeCell.className = "py-4 px-2";
+            hostAddressRangeCell.textContent = hostRange;
+            row.appendChild(hostAddressRangeCell);
+
+            // Broadcast cell
+            const broadcastCell = document.createElement("td");
+            broadcastCell.className = "py-4 px-2";
+            broadcastCell.textContent = broadcastValue;
+            row.appendChild(broadcastCell);
+
+            tbody.appendChild(row);
+        }
+
+        // Add custom subnet rows
+        function addCustomSubnetRows(tbody, numSubnets, ipv4, subnetMask, currentSubnetId) {
+            const ipClass = getIpClass(ipv4);
+            const defaultSubnetMask = getDefaultSubnet(ipClass);
+
+            // Calculate base network address
+            const ipv4Parts = ipv4.split(".");
+            let baseIpDecimal = ipv4Parts.reduce((acc, part) => (acc << 8) | parseInt(part, 10), 0);
+
+            // Apply default subnet mask to get network address
+            const networkAddressDecimal = baseIpDecimal & (((1 << defaultSubnetMask) - 1) << (32 - defaultSubnetMask));
+            baseIpDecimal = networkAddressDecimal;
+
+            // Create rows for each subnet
+            for (let i = 0; i < numSubnets; i++) {
+                const subnetBaseDecimal = baseIpDecimal + (i * Math.pow(2, 32 - subnetMask));
+
+                const netIdDecimal = subnetBaseDecimal;
+                const broadcastDecimal = subnetBaseDecimal + Math.pow(2, 32 - subnetMask) - 1;
+
+                // Convert to IP addresses
+                const netId = decimalToIp(netIdDecimal);
+                const broadcast = decimalToIp(broadcastDecimal);
+
+                // Calculate host range
+                const hostRange = calculateHostRange(netId, broadcast);
+
+                // Create row
+                const row = document.createElement("tr");
+
+                // Highlight current subnet
+                if (currentSubnetId === i) {
+                    row.className = "bg-gray-800 border border-blue-600 hover:bg-gray-600";
+                } else if (currentSubnetId - 1 === i) {
+                    row.className = "bg-gray-800 hover:bg-gray-600";
+                } else {
+                    row.className = "bg-gray-800 border-b border-gray-600 hover:bg-gray-600";
+                }
+
+                // Subnet ID cell
+                const subnetIdCell = document.createElement("td");
+                subnetIdCell.className = "py-4 px-2";
+                subnetIdCell.textContent = i;
+                row.appendChild(subnetIdCell);
+
+                // Net ID cell
+                const netIdCell = document.createElement("td");
+                netIdCell.className = "py-4 px-2";
+                netIdCell.textContent = netId;
+                row.appendChild(netIdCell);
+
+                // Host range cell
+                const hostAddressRangeCell = document.createElement("td");
+                hostAddressRangeCell.className = "py-4 px-2";
+                hostAddressRangeCell.textContent = hostRange;
+                row.appendChild(hostAddressRangeCell);
+
+                // Broadcast cell
+                const broadcastCell = document.createElement("td");
+                broadcastCell.className = "py-4 px-2";
+                broadcastCell.textContent = broadcast;
+                row.appendChild(broadcastCell);
+
+                tbody.appendChild(row);
             }
         }
 
-        function calculateSubnetAndUpdateButton(event) {
-            calculateSubnet(event);
-            updateButtonState();
+        // Convert decimal to IP address
+        function decimalToIp(decimal) {
+            const parts = [];
+            for (let i = 0; i < 4; i++) {
+                parts.unshift(decimal & 255);
+                decimal >>>= 8;
+            }
+            return parts.join(".");
         }
 
-        ipv4Input.addEventListener("input", calculateSubnetAndUpdateButton);
+        // Calculate host address range
+        function calculateHostRange(netId, broadcast) {
+            const startParts = netId.split(".");
+            startParts[3] = parseInt(startParts[3]) + 1;
+            const startHostAddress = startParts.join(".");
 
-        document.addEventListener('DOMContentLoaded', (event) => {
-            ipv4Input.value = '192.168.1.1';
-            calculateSubnetAndUpdateButton({target: {id: 'ipv4'}});
-        });
+            const endParts = broadcast.split(".");
+            endParts[3] = parseInt(endParts[3]) - 1;
+            const endHostAddress = endParts.join(".");
+
+            return `${startHostAddress} - ${endHostAddress}`;
+        }
     </script>
 </body>
+
 </html>
