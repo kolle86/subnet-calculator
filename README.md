@@ -1,5 +1,7 @@
 # 🧮 Subnet Calculator
 
+🔗 https://kolle86.github.io/subnet-calculator/
+
 ## 📝 Description
 
 This is a basic subnetting webtool.
@@ -47,6 +49,7 @@ docker compose up -d
 ```
 
 The application now runs on http://localhost:5050
+
 ## ⚖️ License
 
 This project is licensed under the MIT License.
