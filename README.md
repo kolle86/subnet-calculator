@@ -12,25 +12,6 @@ This is a basic subnetting webtool.
 
 ![Projekt Screenshot](screenshot.png)
 
-## ⚙️ Setup
-
-1. Clone the repository
-```sh
-git clone https://github.com/kolle86/subnet-calculator
-```
-
-2. Navigate into the project directory
-```sh
-cd subnet-calculator
-```
-
-3. Start container
-```sh
-docker compose up -d
-```
-
-The application now runs on http://localhost:5050
-
 ## 💻 Usage
 
 1.  Enter an IPv4 address in the "IPv4 Address" field.
@@ -43,6 +24,29 @@ The application now runs on http://localhost:5050
     *   Subnet ID
     *   IP Class
 
+## ⚙️ Selfhost
+
+1. Clone the repository
+```sh
+git clone https://github.com/kolle86/subnet-calculator
+```
+
+2. Navigate into the project directory
+```sh
+cd subnet-calculator
+```
+
+5. Build docker image
+```sh
+docker build -t subnet-calculator .
+```
+
+3. Start container
+```sh
+docker compose up -d
+```
+
+The application now runs on http://localhost:5050
 ## ⚖️ License
 
 This project is licensed under the MIT License.

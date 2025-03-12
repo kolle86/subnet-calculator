@@ -1,22 +1,9 @@
-# Leichtgewichtiges Node.js-Image verwenden
-FROM node:22-slim
+FROM nginx:alpine
 
-# Arbeitsverzeichnis setzen
-WORKDIR /app
+RUN rm -rf /usr/share/nginx/html/*
 
-# Nur notwendige Dateien kopieren
-COPY package*.json ./
+COPY src/index.html /usr/share/nginx/html/index.html
 
-ENV NODE_ENV=production
+EXPOSE 80
 
-# Produktionabhängigkeiten installieren
-RUN npm ci --only=production && npm cache clean --force
-
-# Restlichen Code kopieren
-COPY . .
-
-# Port freigeben
-EXPOSE 5050
-
-# Startbefehl
-CMD ["node", "app.js"]
+CMD ["nginx", "-g", "daemon off;"]
