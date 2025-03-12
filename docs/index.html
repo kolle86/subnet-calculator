@@ -77,6 +77,7 @@
             if (event.target.id === "ipv4") {
                 if (!isValidIPv4(ipv4)) {
                     // Do nothing if IPv4 is invalid
+                    ipv4Input.classList.add("border-red-500");
                     netId.value = "";
                     broadcast.value = "";
                     hostAddresses.value = "";
@@ -84,6 +85,8 @@
                     subnetId.value = "";
                     slider.min = 0;
                     return;
+                }else {
+                    ipv4Input.classList.remove("border-red-500");
                 }
 
                 let defaultSubnet;
@@ -208,11 +211,14 @@
         const generateTableButton = document.getElementById("generate-table-button");
 
         function generateSubnetTable() {
+            let subnetIdCounter=0;
             const ipv4 = ipv4Input.value;
             const subnetMask = parseInt(document.getElementById("subnet").value);
             const netId = document.getElementById("net-id").value;
             const broadcast = document.getElementById("broadcast").value;
+            const subnetId = document.getElementById("subnet-id");
             const ipClassValue = getIpClass(ipv4);
+
             document.getElementById("ipClassValue").value = ipClassValue;
 
             const tableContainer = document.getElementById("subnet-table-container");
@@ -225,7 +231,7 @@
             const thead = document.createElement("thead");
             thead.className = "text-xs font-semibold uppercase text-gray-400 bg-gray-700";
             const headerRow = document.createElement("tr");
-            const headers = ["Net ID", "Host Address Range", "Broadcast"];
+            const headers = ["Subnet ID", "Net ID", "Host Address Range", "Broadcast"];
             headers.forEach(headerText => {
                 const header = document.createElement("th");
                 header.className = "py-3 px-2 text-left";
@@ -250,6 +256,11 @@
                 // Default subnet mask, create one row
                 const row = document.createElement("tr");
                 row.className = "bg-gray-800 border-b border-gray-600 hover:bg-gray-600";
+
+                const subnetIdCell = document.createElement("td");
+                subnetIdCell.className = "py-4 px-2";
+                subnetIdCell.textContent = subnetIdCounter;
+                row.appendChild(subnetIdCell);
 
                 const netIdCell = document.createElement("td");
                 netIdCell.className = "py-4 px-2";
@@ -278,10 +289,25 @@
             } else {
                 // Implement subnet calculation for non-default subnet masks
                 const ipv4Parts = ipv4.split(".");
-                const baseIpDecimal = ipv4Parts.reduce((acc, part) => (acc << 8) | parseInt(part, 10), 0);
+                let baseIpDecimal = ipv4Parts.reduce((acc, part) => (acc << 8) | parseInt(part, 10), 0);
+
+                let defaultSubnetMask;
+                if (ipClassValue === "A") {
+                    defaultSubnetMask = 8; // Class A
+                } else if (ipClassValue === "B") {
+                    defaultSubnetMask = 16; // Class B
+                } else if (ipClassValue === "C") {
+                    defaultSubnetMask = 24; // Class C
+                } else {
+                    defaultSubnetMask = 8; // Default to Class A
+                }
+
+                // Calculate the network address using the default subnet mask
+                const networkAddressDecimal = baseIpDecimal & (((1 << defaultSubnetMask) - 1) << (32 - defaultSubnetMask));
+                baseIpDecimal = networkAddressDecimal;
 
                 for (let i = 0; i < numSubnets; i++) {
-                    const subnetBaseDecimal = (baseIpDecimal & (((1 << subnetMask) - 1) << (32 - subnetMask))) + (i * Math.pow(2, 32 - subnetMask));
+                    const subnetBaseDecimal = baseIpDecimal + (i * Math.pow(2, 32 - subnetMask));
 
                     let netIdDecimal = subnetBaseDecimal;
                     let broadcastDecimal = subnetBaseDecimal + Math.pow(2, 32 - subnetMask) - 1;
@@ -309,7 +335,19 @@
                     const endHostAddress = broadcastPartsForRange.join(".");
 
                     const row = document.createElement("tr");
-                    row.className = "bg-gray-800 border-b border-gray-600 hover:bg-gray-600";
+                    
+                    if(subnetId.value == subnetIdCounter){
+                        row.className = "bg-gray-800 border border-blue-600 hover:bg-gray-600";
+                    }else if(subnetId.value - 1 == subnetIdCounter){
+                        row.className = "bg-gray-800 hover:bg-gray-600";
+                    }else{
+                        row.className = "bg-gray-800 border-b border-gray-600 hover:bg-gray-600";
+                    }
+
+                    const subnetIdCell = document.createElement("td");
+                    subnetIdCell.className = "py-4 px-2";
+                    subnetIdCell.textContent = subnetIdCounter++;
+                    row.appendChild(subnetIdCell);
 
                     const netIdCell = document.createElement("td");
                     netIdCell.className = "py-4 px-2";
