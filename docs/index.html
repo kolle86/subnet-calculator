@@ -13,7 +13,7 @@
         <h1 class="text-2xl font-bold mb-4">🧮 Subnet-Calculator</h1>
         <form>
             <label for="ipv4">IPv4 Address:</label>
-            <div class="flex items-center">
+            <div class="flex items-center mb-2">
                 <input type="text" id="ipv4" name="ipv4" value="192.168.1.1"
                     class="shadow appearance-none border rounded w-4/5 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-white border-gray-600"
                     oninput="calculateSubnet(event)">
@@ -22,34 +22,36 @@
                     class="shadow appearance-none border rounded w-1/5 py-2 px-3 leading-tight focus:outline-none focus:shadow-outline text-center ml-1 bg-gray-800 text-gray-400 border-gray-600"
                     value="">
             </div>
-            <br>
 
-            <label for="subnet">Subnet Mask Bits:</label>
-            <div class="flex items-center">
+            <label for="subnet">Subnet Mask Bits:</label><span style="float: right;">CIDR</span>
+            <div class="flex items-center mb-2">
                 <input type="range" id="subnet" name="subnet" min="0" max="32" value="8"
                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer bg-gray-800">
-                <span id="subnetValue" class="ml-2">8</span>
-            </div><br>
+                <span id="subnetValue" class="ml-2">/8</span>
+            </div>
+            <label for="subnetMask">Subnet Mask Dotted Decimal:</label>
+            <input type="text" id="subnetMask" name="subnetMask" disabled
+                class="mb-2 shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br>
 
             <label for="net-id">Net ID:</label>
             <input type="text" id="net-id" name="net-id" disabled
-                class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br><br>
+                class="mb-2 shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br>
 
             <label for="broadcast">Broadcast:</label>
             <input type="text" id="broadcast" name="broadcast" disabled
-                class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br><br>
+                class="mb-2 shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br>
 
             <label for="host-addresses">Number of Host Addresses:</label>
             <input type="text" id="host-addresses" name="host-addresses" disabled
-                class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br><br>
+                class="mb-2 shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br>
 
             <label for="subnets">Number of Subnets:</label>
             <input type="text" id="subnets" name="subnets" disabled
-                class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br><br>
+                class="mb-2 shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br>
 
             <label for="subnet-id">Subnet ID:</label>
             <input type="text" id="subnet-id" name="subnet-id" disabled
-                class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br><br>
+                class="mb-4 shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-400 border-gray-600"><br>
         </form>
 
         <button id="generate-table-button"
@@ -69,6 +71,7 @@
         const generateTableButton = document.getElementById("generate-table-button");
         const tableContainer = document.getElementById("subnet-table-container");
         const form = {
+            subnetMask: document.getElementById("subnetMask"),
             ipClassValue: document.getElementById("ipClassValue"),
             netId: document.getElementById("net-id"),
             broadcast: document.getElementById("broadcast"),
@@ -100,7 +103,7 @@
             if (slider.value > 30) {
                 slider.value = 30;
             }
-            subnetValue.textContent = slider.value;
+            subnetValue.textContent = "/" + slider.value;
             calculateSubnet({ target: { id: 'subnet' } });
         }
 
@@ -181,7 +184,7 @@
                 // Only change the slider value if the IP class has changed
                 if (ipClass !== previousIpClass) {
                     slider.value = defaultSubnet;
-                    subnetValue.textContent = defaultSubnet.toString();
+                    subnetValue.textContent = "/" + defaultSubnet.toString();
                     previousIpClass = ipClass;
                 }
                 minSubnet = defaultSubnet;
@@ -208,6 +211,21 @@
             // Calculate subnet ID
             const subnetIdBinary = binaryIp.substring(minSubnet, subnetMask);
             form.subnetId.value = subnetIdBinary ? parseInt(subnetIdBinary, 2) : 0;
+
+            // Calculate subnet mask in dotted decimal notation
+            let subnetMaskBinary = "";
+            for (let i = 0; i < subnetMask; i++) {
+                subnetMaskBinary += "1";
+            }
+            while (subnetMaskBinary.length < 32) {
+                subnetMaskBinary += "0";
+            }
+
+            let subnetMaskParts = [];
+            for (let i = 0; i < 4; i++) {
+                subnetMaskParts.push(parseInt(subnetMaskBinary.substring(i * 8, (i + 1) * 8), 2));
+            }
+            form.subnetMask.value = subnetMaskParts.join(".");
         }
 
         // Get default subnet based on IP class
@@ -222,6 +240,7 @@
 
         // Clear all fields
         function clearFields() {
+            form.subnetMask.value = "";
             form.netId.value = "";
             form.broadcast.value = "";
             form.hostAddresses.value = "";
@@ -274,7 +293,7 @@
         // Create table element with headers
         function createTableElement() {
             const table = document.createElement("table");
-            table.className = "table-auto w-full mt-4";
+            table.className = "table-auto w-full mt-2";
 
             const thead = document.createElement("thead");
             thead.className = "text-xs font-semibold uppercase text-gray-400 bg-gray-700";
