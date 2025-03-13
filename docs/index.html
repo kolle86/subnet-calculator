@@ -280,10 +280,10 @@
             thead.className = "text-xs font-semibold uppercase text-gray-400 bg-gray-700";
 
             const headerRow = document.createElement("tr");
-            ["Subnet ID", "Net ID", "Host Address Range", "Broadcast"].forEach(headerText => {
+            ["Sub&shy;net ID", "Net ID", "Host Address Range", "Broadcast"].forEach(headerText => {
                 const header = document.createElement("th");
                 header.className = "py-3 px-2 text-left";
-                header.textContent = headerText;
+                header.innerHTML = headerText;
                 headerRow.appendChild(header);
             });
 
