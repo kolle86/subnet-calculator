@@ -9,7 +9,7 @@
 </head>
 
 <body class="bg-gray-800 text-white flex items-center justify-center dark:bg-gray-900 dark:text-gray-100">
-    <div class="bg-gray-700 h-screen p-6 shadow-md dark:bg-gray-800 overflow-auto">
+    <div class="bg-gray-700 p-6 shadow-md dark:bg-gray-800">
         <h1 class="text-2xl font-bold mb-4">🧮 Subnet-Calculator</h1>
         <form>
             <label for="ipv4">IPv4 Address:</label>
@@ -26,7 +26,7 @@
 
             <label for="subnet">Subnet Mask Bits:</label>
             <div class="flex items-center">
-                <input type="range" id="subnet" name="subnet" min="0" max="30" value="8"
+                <input type="range" id="subnet" name="subnet" min="0" max="32" value="8"
                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer bg-gray-800">
                 <span id="subnetValue" class="ml-2">8</span>
             </div><br>
@@ -96,6 +96,9 @@
         function handleSliderChange() {
             if (slider.value < minSubnet) {
                 slider.value = minSubnet;
+            }
+            if (slider.value > 30) {
+                slider.value = 30;
             }
             subnetValue.textContent = slider.value;
             calculateSubnet({ target: { id: 'subnet' } });
