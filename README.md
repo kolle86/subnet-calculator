@@ -1,6 +1,6 @@
 # 🧮 Subnet Calculator
 
-🔗 https://kolle86.github.io/subnet-calculator/
+🔗 https://kolstr.github.io/subnet-calculator/
 
 ## 📝 Description
 
